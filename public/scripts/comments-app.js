@@ -23,11 +23,33 @@ var data = [
  * CommentBox component will use the other two components
  */
 var CommentBox = React.createClass({
+    loadCommentsFromServer: function() {
+        $.ajax({
+            url: this.props.url,
+            dataType: 'json',
+            cache: false,
+            success: function(data) {
+                this.setState({ data: data });
+            }.bind(this),
+            error: function(xhr, status, err) {
+                console.error(this.props.url, status, err.toString());
+            }.bind(this)
+        });
+    },
+    // This function executes exactly once during the lifecycle of a component
+    getInitialState: function () {
+        return { data: [] };
+    },
+    // method called by react after a component is rendered for the first time
+    componentDidMount: function () {
+        this.loadCommentsFromServer();
+        setInterval(this.loadCommentsFromServer, this.props.pollInterval);
+    },
     render: function() {
         return (
             <div className="commentBox">
                 <h1>Comments</h1>
-                <CommentList data={ this.props.data }/>
+                <CommentList data={ this.state.data }/>
                 <CommentForm />
             </div>
         );
@@ -91,6 +113,6 @@ var Comment = React.createClass({
  * This method should be called only once all the components have been defined.
  */
 ReactDOM.render(
-    <CommentBox data={ data } />,
+    <CommentBox url="/api/comments" pollInterval={ 2000 } />,
     document.getElementById('content')
 );
