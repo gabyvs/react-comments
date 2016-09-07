@@ -26,13 +26,15 @@ var CommentBox = React.createClass({
 });
 
 /*
- * So far, comment list is only a div
+ * Comment List is creating some comments directly in the template.
+ * We are sending properties to the comment component.
  */
 var CommentList = React.createClass({
     render: function() {
         return (
             <div className="commentList">
-                Hello World! I'm a comment list
+                <Comment author="Banana">This is Banana's comment</Comment>
+                <Comment author="Leo">This is Leo's comment</Comment>
             </div>
         );
     }
@@ -46,6 +48,23 @@ var CommentForm = React.createClass({
         return (
             <div className="commentForm">
                 Hello World! I'm a comment form
+            </div>
+        );
+    }
+});
+
+/*
+ * This component will use node properties to render some information.
+ * It can access node property value and node children...
+ */
+var Comment = React.createClass({
+    render: function () {
+        return (
+            <div className="comment">
+                <h2 className="commentAuthor">
+                    { this.props.author }
+                </h2>
+                { this.props.children }
             </div>
         );
     }
