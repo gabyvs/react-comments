@@ -1,4 +1,13 @@
 /*
+ * Data Model
+ * This should be at least in another file, ideally in a DB.
+ */
+
+var data = [
+    { id: 1, author: 'Banana', text: 'This is Banana\'s comment' },
+    { id: 2, author: 'Leo', text: 'This is Leo\'s comment' }
+];
+/*
  * In these components note the following:
  *
  * - div element, which is a native HTML element, its name starts with a lowercase letter
@@ -18,7 +27,7 @@ var CommentBox = React.createClass({
         return (
             <div className="commentBox">
                 <h1>Comments</h1>
-                <CommentList />
+                <CommentList data={ this.props.data }/>
                 <CommentForm />
             </div>
         );
@@ -31,10 +40,16 @@ var CommentBox = React.createClass({
  */
 var CommentList = React.createClass({
     render: function() {
+        var commentNodes = this.props.data.map(function (comment) {
+            return (
+                <Comment author={ comment.author } keu={ comment.id }>
+                    { comment.text }
+                </Comment>
+            );
+        });
         return (
             <div className="commentList">
-                <Comment author="Banana">This is Banana's comment</Comment>
-                <Comment author="Leo">This is Leo's comment</Comment>
+                { commentNodes }
             </div>
         );
     }
@@ -76,6 +91,6 @@ var Comment = React.createClass({
  * This method should be called only once all the components have been defined.
  */
 ReactDOM.render(
-    <CommentBox />,
+    <CommentBox data={ data } />,
     document.getElementById('content')
 );
